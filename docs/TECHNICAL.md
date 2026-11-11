@@ -1,8 +1,8 @@
 # Technical design
 
-Status: **proposal**, 2026-11-11. How freehouseholdplanner is built. What it does and why is in the
+Status: **accepted**, 2026-11-11, including the decisions in section 13. How freehouseholdplanner is built. What it does and why is in the
 [PRD](PRD.md) (in Dutch); requirement codes such as K3 or B5 refer to it. Section 13 lists the
-decisions that are still open.
+decisions taken on top of the PRD.
 
 ## 1. Constraints that shape the design
 
@@ -279,13 +279,13 @@ are built only for releases (N8) to save Actions minutes.
 - `fastlane/metadata/android/` holds the description and screenshots for a later F-Droid repository.
 - No non-free dependencies anywhere in the Android build; checked before each release.
 
-## 13. Open decisions
+## 13. Decisions
 
-| # | Decision | Proposal |
+| # | Question | Decision (2026-11-11) |
 | --- | --- | --- |
-| T1 | UI framework | Svelte 5: small runtime, no virtual DOM, good accessibility warnings at compile time. Alternatives: SolidJS (similar), React (bigger, most familiar), no framework (more code to maintain) |
+| T1 | UI framework | Svelte 5: small runtime, no virtual DOM, accessibility warnings at compile time |
 | T2 | Rust dependencies for step 1 (each needs approval, CLAUDE.md) | `automerge`, `rusqlite` (bundled SQLite), `snow` (Noise), `chacha20poly1305`, `ed25519-dalek`, `x25519-dalek`, `sha2`, `rand`, `serde`, `uuid`, an mDNS crate, `keyring` (desktop key storage), a PAKE crate (step 1 only if the typed code is in step 1). Each to be checked for size and maintenance when it is added |
-| T3 | Generated TypeScript types from Rust | `specta` with `tauri-specta`, or `ts-rs`; or hand-written types with a test that compares them |
+| T3 | Generated TypeScript types from Rust | Yes; `tauri-specta` or `ts-rs`, chosen when the first view models are built (work package 7) |
 | T4 | App lock with biometrics also protecting the storage key | Yes on Android (keystore key requires user authentication, with a grace period); desktop relies on the OS login |
 | T5 | Typed pairing code (PC without camera) in step 1 or later | Later: in step 1 a PC can pair by showing the QR code and letting the phone scan it, which needs no camera on the PC |
 | T6 | Port the sync PoC to Rust first, before any UI | Yes: the core with sync tests passing is the base of step 1; the UI follows |

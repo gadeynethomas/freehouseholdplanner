@@ -27,8 +27,8 @@ PRD glossary: "toestel" = household appliance (`appliance`), "apparaat" = a phon
 ## Security (from the start, not afterwards)
 
 - Only paired devices get household data (K2). Pairing codes are one-time and expire after 10 minutes.
-- All sync traffic is end-to-end encrypted with the household key (K4). A relay or network never sees content. Use well-reviewed primitives from an established library; never roll your own crypto.
-- Unpairing a device rotates the household key (K8). Data at rest on a device is encrypted; the app can be locked with a PIN or fingerprint.
+- Every connection between devices is a Noise session, authenticated with each device's static key from the household document: `KK` between paired devices, `XK` for QR pairing (K4, `docs/TECHNICAL.md` section 6). A network never sees content. Use well-reviewed primitives from an established library; never roll your own crypto.
+- Unpairing a device removes its key from the household, so its handshakes fail, and rotates the household key that protects backups (K8). Data at rest on a device is encrypted; the app can be locked with a PIN or fingerprint.
 - Each household is a separate encrypted unit (A4). A test proves that data from one household never reaches another, for every sync and storage path.
 - Treat everything from another device as untrusted: validate, bound sizes, and reject unknown or malformed changes without crashing (K9).
 - SQLite: parameterized queries only. No string-built SQL.

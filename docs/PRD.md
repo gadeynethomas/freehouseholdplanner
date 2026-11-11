@@ -277,7 +277,7 @@ Alle vragen zijn beantwoord en verwerkt in de eisen.
 - [x] Open vragen V1–V8 beantwoorden.
 - [x] De voorstellen aanvaarden, uitstellen of weigeren.
 - [x] Nieuwe open vragen N1–N3 beantwoorden.
-- [ ] Het technisch document (opbouw en techniek) opstellen: voorstel in TECHNICAL.md, open beslissingen T1–T6.
+- [x] Het technisch document (opbouw en techniek) opstellen: TECHNICAL.md, beslissingen T1–T6.
 - [ ] Sync-techniek kiezen (Automerge, Yjs of een alternatief) met een proof of concept: twee gsm's en een laptop die offline wijzigen en daarna correct samenvoegen op het thuisnetwerk (N7).
 - [x] README opstellen.
 - [ ] Bijdragegids opstellen.
