@@ -90,7 +90,11 @@ So the sync itself, the background wake-up and Aware's data path still need the 
 
 ### Two phones
 
-Not run yet. Needs a second Android 13+ phone.
+Not run yet. Phones: Pixel 7a (Android 17) and OnePlus Nord 3 (OxygenOS, MediaTek). Run every
+test in both directions: OxygenOS is known to stop background apps more aggressively than a
+Pixel, so the background scan (tests 3–5, 8) may behave differently there. Run them first with the
+app's battery setting at the default ("Geoptimaliseerd"), then with "Onbeperkt", and note which
+setting is needed. The app's status line shows whether the Nord 3 supports Wi-Fi Aware.
 
 Open questions the tests answer:
 
