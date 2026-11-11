@@ -81,6 +81,8 @@ jobs:
           cache: npm
           cache-dependency-path: app/package-lock.json
       - name: Install the system libraries Tauri needs on Linux
+        # Fail fast when the Ubuntu mirrors are unreachable instead of retrying until the job times out.
+        timeout-minutes: 10
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libxdo-dev libssl-dev librsvg2-dev
