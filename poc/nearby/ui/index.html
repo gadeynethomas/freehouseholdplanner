@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FHP Nearby</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Sync in de buurt</h1>
+      <p id="state" role="status" aria-live="polite">Laden…</p>
+      <p id="error" class="error" role="alert"></p>
+
+      <h2>Wijzigingen</h2>
+      <div class="row">
+        <button type="button" data-size="1024">Kleine wijziging (1 KB)</button>
+        <button type="button" data-size="204800">Grote wijziging (200 KB)</button>
+      </div>
+
+      <h2>Instellingen</h2>
+      <div class="row">
+        <input type="checkbox" id="service" />
+        <label for="service">Dienst: uitzenden, verbindingen aanvaarden, scannen (melding)</label>
+      </div>
+      <div class="row">
+        <input type="checkbox" id="backgroundScan" />
+        <label for="backgroundScan">Achtergrondscan door Android (werkt ook als de app dicht is)</label>
+      </div>
+      <div class="row">
+        <input type="checkbox" id="aware" />
+        <label for="aware">Wi-Fi Aware (binnen de dienst)</label>
+      </div>
+      <div class="row">
+        <button type="button" id="permissions">Toestemmingen vragen</button>
+        <button type="button" id="clear">Log wissen</button>
+      </div>
+
+      <h2>Samenvatting</h2>
+      <dl id="summary"></dl>
+
+      <h2>Laatste gebeurtenissen</h2>
+      <table>
+        <thead>
+          <tr><th scope="col">Tijd</th><th scope="col">Wat</th><th scope="col">Batterij</th></tr>
+        </thead>
+        <tbody id="events"></tbody>
+      </table>
+    </main>
+  </body>
+</html>

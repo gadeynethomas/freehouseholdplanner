@@ -1,0 +1,18 @@
+[package]
+name = "fhp-nearby"
+version = "0.0.0"
+description = "PoC: sync between two phones near each other over Bluetooth LE and Wi-Fi Aware (K12)"
+license = "AGPL-3.0-only"
+edition = "2021"
+publish = false
+
+[lib]
+name = "fhp_nearby_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.4", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.5", features = [] }
+serde_json = "=1.0.154"

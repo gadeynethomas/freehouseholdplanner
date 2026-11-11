@@ -1,0 +1,17 @@
+{
+  "name": "freehouseholdplanner-nearby-poc",
+  "version": "0.0.0",
+  "private": true,
+  "description": "PoC: sync between two phones near each other without a shared network, over Bluetooth LE and Wi-Fi Aware (K12)",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4"
+  }
+}
