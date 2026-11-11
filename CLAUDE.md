@@ -64,7 +64,8 @@ PRD glossary: "toestel" = household appliance (`appliance`), "apparaat" = a phon
 ## Git and GitHub
 
 - Work directly on `dev`; no feature branches. Only push to `dev`, never to `main`.
-- Branch protection may not be available (free GitHub plan), so this rule is enforced by discipline: never run `git push` to `main`.
+- `main` is protected (also for admins): changes only via a pull request with green CI; no force-push or deletion. Never run `git push` to `main`.
+- The protection lists the CI job names as required checks. When you rename, add or remove a CI job, update the required checks in the same change, or PRs to `main` will hang or skip the new job.
 - A pull request to `main` is only made when the maintainer asks for it.
 - Before any PR to `main`, do a code review of all changed code since the last merge (correctness, security, tests, maintainability) and report the findings first.
 - Use small, focused commits with a clear message in imperative mood.
