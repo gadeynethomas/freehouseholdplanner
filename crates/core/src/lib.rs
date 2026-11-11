@@ -2,6 +2,21 @@
 //! (`docs/TECHNICAL.md`, section 2). It has no dependency on Tauri, so the app and the headless
 //! always-on device (K6) share it, and it is tested with plain `cargo test`.
 
+mod error;
+mod ids;
+mod model;
+mod storage;
+mod text;
+
+pub use error::{Error, Result};
+pub use ids::{DeviceId, HouseholdId, MemberId, RoomId, actor_for};
+pub use model::{
+    Device, Founder, Household, HouseholdInfo, Member, NewHousehold, Role, Room, SCHEMA_VERSION,
+    STATIC_KEY_LEN,
+};
+pub use storage::{ChunkStats, StorageKey, Store};
+pub use text::MAX_NAME_CHARS;
+
 use serde::Serialize;
 
 /// What the UI shows about the running core.

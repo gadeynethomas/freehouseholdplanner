@@ -17,6 +17,11 @@ repository = "https://github.com/gadeynethomas/freehouseholdplanner"
 [workspace.dependencies]
 fhp-core = { path = "crates/core" }
 serde = { version = "=1.0.229", features = ["derive"] }
+automerge = "=0.12.0"
+chacha20poly1305 = "=0.11.0"
+getrandom = "=0.4.3"
+rusqlite = { version = "=0.41.1", features = ["bundled"] }
+uuid = { version = "=1.29.0", features = ["v4"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

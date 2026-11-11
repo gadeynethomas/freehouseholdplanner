@@ -112,14 +112,16 @@ statements.
 
 | Table | Content |
 | --- | --- |
-| `doc_chunks` | Compacted document snapshot plus incremental changes since (append-only); compaction on start-up and in charge mode (`poc/sync` lesson 3) |
+| `meta` | The household id and a key check, so a wrong key or another household's file is refused up front |
+| `doc_chunks` | Compacted document snapshot plus incremental changes since (append-only); compaction in one transaction once 200 change chunks pile up or they outgrow the snapshot four times, checked on start-up and in charge mode (`poc/sync` lesson 3) |
 | `peers` | Per paired device: last address, last sync time and path (K7), saved Automerge sync state |
 | `blobs` | Attachment bytes by content hash, with a reference count and a "fetch on open" flag (G2) |
 | `local_settings` | Settings that are not shared: charge mode on/off, fetch-on-open, UI preferences |
 
 **Encryption at rest (K8).** Every document chunk and blob is encrypted by the core with a random
-256-bit storage key (XChaCha20-Poly1305) before it reaches SQLite. The storage key is wrapped by the
-platform:
+256-bit storage key (XChaCha20-Poly1305) before it reaches SQLite. The associated data binds each
+chunk to its household, kind and position, so chunks cannot be swapped, reordered or copied into
+another household's file. The storage key is wrapped by the platform:
 
 - Android: an AES key in the Android Keystore (hardware-backed where available), via a small Kotlin
   plugin.
@@ -284,7 +286,7 @@ are built only for releases (N8) to save Actions minutes.
 | # | Question | Decision (2026-11-11) |
 | --- | --- | --- |
 | T1 | UI framework | Svelte 5: small runtime, no virtual DOM, accessibility warnings at compile time |
-| T2 | Rust dependencies for step 1 (each needs approval, CLAUDE.md) | `automerge`, `rusqlite` (bundled SQLite), `snow` (Noise), `chacha20poly1305`, `ed25519-dalek`, `x25519-dalek`, `sha2`, `rand`, `serde`, `uuid`, an mDNS crate, `keyring` (desktop key storage), a PAKE crate (step 1 only if the typed code is in step 1). Each to be checked for size and maintenance when it is added |
+| T2 | Rust dependencies for step 1 (each needs approval, CLAUDE.md) | `automerge`, `rusqlite` (bundled SQLite), `snow` (Noise), `chacha20poly1305`, `ed25519-dalek`, `x25519-dalek`, `sha2`, `getrandom` (instead of `rand`: smaller, and what `rand` uses underneath), `serde`, `uuid`, an mDNS crate, `keyring` (desktop key storage), a PAKE crate (step 1 only if the typed code is in step 1). Each to be checked for size and maintenance when it is added |
 | T3 | Generated TypeScript types from Rust | Yes; `tauri-specta` or `ts-rs`, chosen when the first view models are built (work package 7) |
 | T4 | App lock with biometrics also protecting the storage key | Yes on Android (keystore key requires user authentication, with a grace period); desktop relies on the OS login |
 | T5 | Typed pairing code (PC without camera) in step 1 or later | Later: in step 1 a PC can pair by showing the QR code and letting the phone scan it, which needs no camera on the PC |
