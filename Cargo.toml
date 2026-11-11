@@ -1,0 +1,25 @@
+[workspace]
+resolver = "3"
+members = ["crates/core", "app/src-tauri"]
+# The proofs of concept are separate Cargo projects with their own lockfiles.
+exclude = ["poc"]
+
+[workspace.package]
+# The version number of the app. Tauri reads its own copy in app/src-tauri/tauri.conf.json (it
+# does not resolve workspace versions); a test in the app crate keeps the two equal. Tauri derives
+# the Android versionCode from it (major * 1,000,000 + minor * 1,000 + patch), so it must only go
+# up (N8).
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+repository = "https://github.com/gadeynethomas/freehouseholdplanner"
+
+[workspace.dependencies]
+fhp-core = { path = "crates/core" }
+serde = { version = "=1.0.229", features = ["derive"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
