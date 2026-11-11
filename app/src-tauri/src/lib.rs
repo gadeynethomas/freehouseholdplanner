@@ -21,6 +21,9 @@ mod tests {
     fn tauri_config_has_the_workspace_version() {
         let config = include_str!("../tauri.conf.json");
         let expected = format!("\"version\": \"{}\"", env!("CARGO_PKG_VERSION"));
-        assert!(config.contains(&expected), "tauri.conf.json must contain {expected}");
+        assert!(
+            config.contains(&expected),
+            "tauri.conf.json must contain {expected}"
+        );
     }
 }
