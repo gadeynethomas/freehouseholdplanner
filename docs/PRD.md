@@ -213,6 +213,7 @@ Hoe de app moet zijn, los van wat hij doet.
 | Meerdere huishoudens | Eerst één huishouden; elk huishouden is een apart versleuteld geheel, zodat een apparaat later bij meerdere huishoudens kan horen (A4) |
 | Privacy | Geen tracking, geen externe scripts of lettertypes, geen gegevens naar derden (ook niet voor de snelle invoer, H8; een eventueel AI-model draait lokaal) |
 | Hosting | Geen hosting nodig: elk apparaat heeft alle gegevens. Optioneel een altijd-aan-apparaat thuis (K6) en een eigen relay (K3) |
+| Installeren en bijwerken | Releases op GitHub. Android: een APK, updates via Obtainium; later een eigen F-Droid-repository. Windows en Linux: een installatiebestand en een AppImage, updates via de updater van Tauri na bevestiging. Alles ondertekend met een sleutel die op twee plaatsen bewaard wordt (N8) |
 | Licentie | AGPL-3.0: wie de app aanpast en online aanbiedt, moet de code ook delen |
 | Betrouwbaarheid | Elk apparaat heeft een volledige kopie; back-up naar een bestand op elk apparaat, automatisch naar een gekozen map of dagelijks op het altijd-aan-apparaat (G3) |
 | Snelheid | Een huishouden heeft honderden tot enkele duizenden taken; elk scherm laadt vlot met die hoeveelheid |
@@ -242,7 +243,7 @@ Acht stappen, elk op zich al bruikbaar. De volgorde is goedgekeurd (V8); de nieu
 - Externen als gebruiker van de app (inloggen als vakman); een alleen-lezen link (E3) is het enige wat zij te zien krijgen.
 - Boekhouding: de app volgt kosten op, maar is geen boekhoudpakket.
 - Live samenwerken (twee mensen die tegelijk hetzelfde scherm bewerken en elkaars wijzigingen meteen zien).
-- Publicatie in de Play Store of Microsoft Store: eerst installeren via een APK of installatiebestand; F-Droid of stores eventueel later.
+- Publicatie in de Play Store, de Microsoft Store of de officiële F-Droid-catalogus: eerst via GitHub Releases (N8); een eigen F-Droid-repository en stores eventueel later.
 - Webweergave buiten het thuisnetwerk (bv. op het werk): eventueel later via WebRTC. De browser laadt de app dan van een vaste HTTPS-pagina en maakt een end-to-end versleutelde, rechtstreekse verbinding met de gsm; daarvoor is een kleine server nodig om de verbinding op te zetten, en soms een relay (N5).
 - iOS en macOS: eerst niet. Dezelfde code kan later ook daar draaien, maar vraagt een Apple-ontwikkelaarsaccount.
 - Een centrale server als verplicht onderdeel; het altijd-aan-apparaat blijft optioneel (K6).
@@ -268,6 +269,7 @@ Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
 | N5 | Hoe gebruik je de app op een pc waar je geen software mag installeren? | Webweergave via het thuisnetwerk (11 november 2026): de gsm toont de app in de browser van de pc, na het intikken van een eenmalige sessiecode. Een variant via WebRTC die ook buitenshuis werkt (bv. op het werk), is een mogelijke uitbreiding voor later | K10, Bewust buiten scope |
 | N6 | Hoe houden we dataverkeer, opslag en batterijverbruik laag, zonder dat een apparaat verplicht is? | Elke functie werkt in een huishouden met enkel gsm's (11 november 2026); pc, altijd-aan-apparaat en relay versnellen enkel. Bijlagen staan op elk apparaat, verkleind bij het toevoegen en buiten de wijzigingsgeschiedenis. Een gsm houdt op de achtergrond geen verbinding open, behalve aan de lader (laadmodus) of als je dat kiest. Basis: de Android-test (poc/android) toonde dat Android een app zonder voorgronddienst binnen 5 s bevriest, en dat met voorgronddienst berichten binnen ongeveer 1 s aankomen, ook in diepe slaap. De NAS dient als optionele bestemming voor back-ups; een rechtstreekse koppeling voor bijlagen is niet nodig | K1, K3, K6, K11, G2, G3, niet-functionele eisen |
 | N7 | Synchroniseren we buitenshuis via een relay, of enkel thuis? | Open. Voorstel: standaard enkel op hetzelfde netwerk (thuis); onderweg werk je offline en alles komt samen zodra je thuis bent. Een relay (zelf te draaien, of een publieke van het project) is een optie, net als het altijd-aan-apparaat. Een rechtstreekse verbinding tussen twee gsm's via mobiel internet lukt meestal niet (CGNAT) | K3 |
+| N8 | Hoe installeren de apparaten de app, en hoe krijgen ze updates? | Via GitHub Releases (11 november 2026): bij elke versietag bouwt een GitHub Action alle pakketten, ondertekent ze en publiceert ze; de repository is publiek (AGPL-3.0). Android: updates via Obtainium; een eigen F-Droid-repository op GitHub Pages kan later. Daarom van bij het begin: een vaste app-id, een oplopend versienummer, beschrijving en schermafbeeldingen in de mappen die F-Droid leest (fastlane), en geen onvrije bibliotheken zoals Google Play-diensten. Windows en Linux: de updater van Tauri. De ondertekeningssleutel wordt op twee plaatsen bewaard: wie hem verliest, kan de app niet meer bijwerken | Niet-functionele eisen, Bewust buiten scope |
 
 ### Open taken
 
@@ -279,6 +281,8 @@ Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
 - [ ] README en bijdragegids opstellen.
 - [ ] Diensttype voor de laadmodus kiezen: een dataSync-voorgronddienst mag op Android 15 en later maar 6 uur per 24 uur draaien (K11).
 - [ ] Open vraag N7 beantwoorden (relay).
+- [ ] Bij de eerste release: ondertekeningssleutel aanmaken en op twee plaatsen bewaren, release-Action opzetten (N8).
+- [ ] Nagaan of en wanneer de verificatieplicht van Google voor ontwikkelaars ook in België geldt voor apps buiten de Play Store (N8).
 
 ## Voorstellen
 
