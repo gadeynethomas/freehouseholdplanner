@@ -25,6 +25,7 @@ two proofs of concept.
 | [`poc/sync`](poc/sync) | Sync proof of concept: Automerge, QR pairing, encryption, unpairing |
 | [`poc/android`](poc/android) | How timely a Tauri app on Android receives messages in the background |
 | [`CLAUDE.md`](CLAUDE.md) | Guidelines for code, security and git |
+| [`SECURITY.md`](SECURITY.md) | How to report a vulnerability privately |
 
 ## License
 
