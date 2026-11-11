@@ -1,0 +1,22 @@
+[package]
+name = "freehouseholdplanner"
+description = "freehouseholdplanner app: the Tauri shell around the core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+# Android loads the app as a shared library; desktop links it into the binary.
+name = "freehouseholdplanner_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.4", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.5", features = [] }
+fhp-core.workspace = true
+
+[lints]
+workspace = true

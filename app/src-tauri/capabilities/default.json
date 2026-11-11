@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "The main window calls the app's own commands only; no Tauri plugins or core APIs are granted",
+  "windows": ["main"],
+  "permissions": []
+}

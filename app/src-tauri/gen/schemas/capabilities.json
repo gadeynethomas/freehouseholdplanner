@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"The main window calls the app's own commands only; no Tauri plugins or core APIs are granted","local":true,"windows":["main"],"permissions":[]}}

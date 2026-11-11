@@ -1,0 +1,39 @@
+{
+  "name": "freehouseholdplanner-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "freehouseholdplanner app: Svelte UI and Tauri shell (the version lives in the root Cargo.toml)",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "tauri": "tauri",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@tauri-apps/cli": "2.12.4",
+    "@types/node": "26.6.6",
+    "eslint": "10.14.0",
+    "eslint-plugin-svelte": "3.23.1",
+    "prettier": "3.9.10",
+    "prettier-plugin-svelte": "4.1.1",
+    "svelte": "5.57.3",
+    "svelte-check": "4.7.7",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.5"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.4"
+  }
+}
