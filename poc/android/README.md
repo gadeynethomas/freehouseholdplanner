@@ -107,6 +107,27 @@ What this means for the real app:
 - Re-check the permission when the app returns to the foreground, and reconnect at once when it is
   granted.
 
+### Direct sync over IPv6 (N7)
+
+Can a phone on mobile data reach a device at home over IPv6, without a relay? Tested on 2026-11-11:
+the Pixel on mobile data (Wi-Fi off, adb over USB), the laptop wired at home, both with a public
+IPv6 address. Both sides sent a UDP datagram every second to each other's address and port for
+a minute, so that each firewall would see outgoing traffic first (hole punching).
+
+| Check | Result |
+| --- | --- |
+| Public IPv6 address | Both sides |
+| Mobile IPv4 | `100.64.0.0/10` address: carrier-grade NAT |
+| UDP reply from a public server (DNS), same ports | Works on both sides |
+| Phone pings the laptop | No reply |
+| Simultaneous UDP in both directions, two runs | 0 datagrams arrived, either way |
+| Phone's datagrams in the laptop's firewall log | None: dropped before they reach the laptop |
+
+So the home router, the mobile carrier's firewall or both drop this traffic. Which one could not be
+determined without a third public host. The provider's modem has no IPv6 firewall settings, so a
+household cannot change it. Direct sync over IPv6 does not work on this network; it stays a possible
+later extension that may work elsewhere, never a requirement.
+
 Not tested yet, needed for the real app:
 
 - Discovering peers with mDNS (`NsdManager`) under this permission.
