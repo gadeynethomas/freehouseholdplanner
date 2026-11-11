@@ -71,7 +71,8 @@ jobs:
 
   app:
     name: App (UI checks and build, Tauri shell clippy and tests)
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest (26.04) could not reach the Ubuntu mirrors for hours on 2026-11-11.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -84,8 +85,9 @@ jobs:
         # Fail fast when the Ubuntu mirrors are unreachable instead of retrying until the job times out.
         timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libxdo-dev libssl-dev librsvg2-dev
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 \
+            libwebkit2gtk-4.1-dev libxdo-dev libssl-dev librsvg2-dev
       - run: rustup component add clippy
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -93,7 +95,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: cargo-app-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+          key: cargo-app-ubuntu-24.04-${{ hashFiles('Cargo.lock') }}
       - run: npm ci
         working-directory: app
       # Type check, lint, format check, tests and the build into app/dist, which the shell embeds.
