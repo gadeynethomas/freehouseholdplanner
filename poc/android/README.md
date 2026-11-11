@@ -1,0 +1,90 @@
+# Android background probe
+
+Answers one question before we build the real app: **how timely does a Tauri app on Android receive
+messages when it is in the background or the screen is off?** Android freezes background apps, and
+JavaScript in the Tauri web view does not run then at all. So the probe keeps its connection in Rust.
+
+| Part | Where | Role |
+| --- | --- | --- |
+| Relay client and log | `probe-core/` | Tauri-free Rust crate: TCP connection to the relay, reconnects, logs every ping |
+| App | `src-tauri/` | Tauri 2 app: commands for the UI, starts the probe at launch |
+| Foreground service | `src-tauri/gen/android/app/src/main/java/.../ProbeService.kt` | Optional notification "Synchroniseert…" that keeps the process alive |
+| UI | `ui/` | Plain HTML and JavaScript, no bundler; shows pings, delays and a summary |
+| Sender | `sender/sender.ts` | Runs the relay from `poc/sync` on the laptop and sends a numbered ping every 10 s |
+
+## Setup (once)
+
+Toolchains are installed per user, without sudo: Rust (`~/.cargo`), Temurin JDK 17 (`~/.jdks`),
+Android SDK with NDK (`~/Android/Sdk`). `env.sh` puts them on the path.
+
+```sh
+source env.sh
+npm ci
+npx tauri android build --debug --apk --target aarch64
+cd probe-core && cargo test && cargo clippy --all-targets -- -D warnings
+```
+
+The firewall (ufw) must let the phone reach the relay on TCP port 7400 from the home network.
+
+## Test protocol
+
+Run `npm run sender` on the laptop. Then on the phone, with the app open:
+
+| Step | Duration | What to do |
+| --- | --- | --- |
+| 1. Foreground | 2 min | App open, screen on |
+| 2. Background | 5 min | Home button, screen on |
+| 3. Screen off | 30 min | Lock the phone, leave it still (Doze starts after a while) |
+| 4–6. Repeat | same | Steps 1–3 with "Voorgronddienst" on |
+
+Doze can be forced instead of waiting: `adb shell dumpsys deviceidle force-idle` (and
+`adb shell dumpsys deviceidle unforce` afterwards). The app marks every switch to and from the
+background in its log. Each ping records when it was sent and when it arrived.
+
+## Results (2026-11-11)
+
+Google Pixel 7a, Android 17, debug APK, home Wi-Fi, laptop relay. Ping every 10 s; delay is
+arrival minus send time (laptop and phone clocks, both NTP-synced).
+
+| Step | Pings received | Delay | Notes |
+| --- | --- | --- | --- |
+| 1. Foreground | all | 0.5–0.7 s | |
+| 2. Background | none after 5 s | – | Connection aborted 5 s after the home button, one failed reconnect, then the process was frozen (`isFrozen=true`, cached) |
+| 3. Screen off | skipped | – | A frozen process runs no code at all, so step 2 already answers it |
+| 4. Foreground + service | 14 of 14 | 0.5–0.7 s | Service accepted as type `dataSync` |
+| 5. Background + service | 32 of 32 | 0.5–1.1 s | Process not frozen |
+| 6. Screen off + service | 181 of 181 (30 min) | median 0.66 s, p95 1.11 s, max 2.5 s | Unplugged, locked, still; deep Doze (`mState=IDLE`) for most of the run. Battery 37 % → 36 % |
+
+Conclusions:
+
+- Without a foreground service, Android freezes the app within seconds of leaving the foreground.
+  Background sync on Android needs the foreground service with its ongoing notification.
+- With the service, the Rust connection keeps receiving within about a second, even in deep Doze,
+  at low battery cost over 30 minutes.
+- After a long run of failed attempts, the probe waited 19 s to reconnect when the app came back
+  to the foreground. The real app should reconnect immediately on return to the foreground and
+  when the network comes back.
+- Only a Pixel was tested; other vendors (Samsung, Xiaomi) kill background apps more aggressively.
+- Cosmetic: the title runs under the status bar (edge-to-edge insets not handled).
+
+### Foreground service type
+
+The first runs used type `dataSync`. Android 15+ limits `dataSync` to 6 hours per 24 hours (the
+timer resets when the user opens the app) and forbids starting it from `BOOT_COMPLETED`. That does
+not fit continuous sync. The probe now uses `connectedDevice`: "interactions with external devices
+that require a Bluetooth, NFC, IR, USB, or network connection", which is what syncing with the
+household's other devices is. It has no time limit and may start after boot. Its runtime
+prerequisite is met by declaring `CHANGE_NETWORK_STATE` (a normal permission, granted at install).
+
+Re-run with `connectedDevice` (same phone, unplugged, locked, deep Doze): 62 of 62 pings in
+10 minutes, median 0.66 s, max 3.9 s. Service reported as `types=0x10`.
+
+Not tested yet, needed for the real app:
+
+- **Local network permission (Android 17).** Apps that target API 37 need the runtime permission
+  `ACCESS_LOCAL_NETWORK` (group "Apparaten in de buurt") for any TCP or UDP traffic on the local
+  network. This probe targets API 36 and gets it implicitly. The system picker
+  (`NsdManager.FLAG_SHOW_PICKER`) selects a single service, which does not fit syncing with several
+  peers, so the app should ask for the permission at pairing time and explain why.
+- Starting the service from `BOOT_COMPLETED`.
+- Other vendors' battery savers.

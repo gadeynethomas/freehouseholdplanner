@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FHP Probe</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Achtergrondtest</h1>
+      <p id="connection" role="status" aria-live="polite">Bezig met verbinden…</p>
+
+      <form id="relay-form">
+        <label for="relay">Relay (laptop)</label>
+        <div class="row">
+          <input id="relay" name="relay" autocomplete="off" inputmode="url" />
+          <button type="submit">Opslaan</button>
+        </div>
+      </form>
+
+      <div class="row">
+        <input type="checkbox" id="service" />
+        <label for="service">Voorgronddienst (melding "synchroniseert…")</label>
+      </div>
+      <p id="service-error" class="error" role="alert"></p>
+
+      <h2>Samenvatting</h2>
+      <dl id="summary"></dl>
+
+      <h2>Laatste gebeurtenissen</h2>
+      <table>
+        <thead>
+          <tr><th scope="col">Tijd</th><th scope="col">Wat</th><th scope="col">Vertraging</th></tr>
+        </thead>
+        <tbody id="events"></tbody>
+      </table>
+      <p class="hint">Logbestand: <span id="log-path"></span></p>
+    </main>
+  </body>
+</html>

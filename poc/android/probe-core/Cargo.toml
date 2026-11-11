@@ -1,0 +1,11 @@
+[package]
+name = "probe-core"
+version = "0.0.0"
+description = "Relay client and event log of the Android background probe, independent of Tauri"
+license = "AGPL-3.0-only"
+edition = "2021"
+publish = false
+
+[dependencies]
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"

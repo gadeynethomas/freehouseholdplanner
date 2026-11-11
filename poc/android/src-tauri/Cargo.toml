@@ -1,0 +1,20 @@
+[package]
+name = "fhp-probe"
+version = "0.0.0"
+description = "Probe: how timely does a Tauri app on Android receive messages in the background"
+license = "AGPL-3.0-only"
+edition = "2021"
+publish = false
+
+[lib]
+name = "fhp_probe_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.4", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.5", features = [] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+probe-core = { path = "../probe-core" }

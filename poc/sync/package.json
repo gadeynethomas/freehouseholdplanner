@@ -1,0 +1,30 @@
+{
+  "name": "freehouseholdplanner-sync-poc",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Proof of concept: local-first sync between household devices (PRD K1-K9)",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test --test-concurrency=1 \"test/**/*.test.ts\"",
+    "bench": "node src/bench.ts",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test"
+  },
+  "dependencies": {
+    "@automerge/automerge": "3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "eslint": "10.14.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2"
+  }
+}
