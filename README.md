@@ -22,6 +22,7 @@ two proofs of concept.
 | Path | Contents |
 | --- | --- |
 | [`docs/PRD.md`](docs/PRD.md) | Product requirements (in Dutch): features, decisions, delivery steps |
+| [`docs/TECHNICAL.md`](docs/TECHNICAL.md) | Technical design (proposal): architecture, data model, sync, security |
 | [`poc/sync`](poc/sync) | Sync proof of concept: Automerge, QR pairing, encryption, unpairing |
 | [`poc/android`](poc/android) | How timely a Tauri app on Android receives messages in the background |
 | [`CLAUDE.md`](CLAUDE.md) | Guidelines for code, security and git |

@@ -11,7 +11,7 @@ freehouseholdplanner helpt ons huishouden om alledaagse huistaken en grotere pro
 
 De app brengt wat professionele planningstools (zoals Microsoft Planner) kunnen naar het huishouden: taken, fasen, budgetten, offertes en planning. Toch moet ze bruikbaar blijven voor wie nooit met zo'n tool werkte. De meerwaarde is **voorspelbaarheid**: op elk moment weten wat er nog moet gebeuren, wie het doet, wanneer, en of het binnen het budget blijft.
 
-Dit document zegt **wat** de app doet en **waarom**. Hoe hij gebouwd wordt, staat later in een apart technisch document.
+Dit document zegt **wat** de app doet en **waarom**. Hoe hij gebouwd wordt, staat in het [technisch document](TECHNICAL.md) (Engels).
 
 ## Gebruikers en uitgangspunten
 
@@ -277,7 +277,7 @@ Alle vragen zijn beantwoord en verwerkt in de eisen.
 - [x] Open vragen V1–V8 beantwoorden.
 - [x] De voorstellen aanvaarden, uitstellen of weigeren.
 - [x] Nieuwe open vragen N1–N3 beantwoorden.
-- [ ] Het technisch document (opbouw en techniek) opstellen.
+- [ ] Het technisch document (opbouw en techniek) opstellen: voorstel in TECHNICAL.md, open beslissingen T1–T6.
 - [ ] Sync-techniek kiezen (Automerge, Yjs of een alternatief) met een proof of concept: twee gsm's en een laptop die offline wijzigen en daarna correct samenvoegen op het thuisnetwerk (N7).
 - [x] README opstellen.
 - [ ] Bijdragegids opstellen.

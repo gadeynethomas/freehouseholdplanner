@@ -2,7 +2,7 @@
 
 Local-first app for planning household chores and home projects (see `docs/PRD.md`, decisions N4 and N5).
 No central server: every device holds all household data and syncs peer-to-peer, end-to-end encrypted.
-Stack (direction, details in the technical document): Tauri 2 + TypeScript, SQLite, a CRDT library (Automerge or similar; being validated in `poc/sync`).
+Stack (details in `docs/TECHNICAL.md`): a Rust core (Automerge, SQLite, sync, crypto) inside a Tauri 2 app with a TypeScript UI. The core owns all data and business rules; the UI only renders views and sends intents.
 Targets: Android, Windows, Linux (K1). License: AGPL-3.0.
 UI language: Dutch, all strings translatable. Code, comments, commits: English.
 PRD glossary: "toestel" = household appliance (`appliance`), "apparaat" = a phone or PC running the app (`device`).
@@ -13,7 +13,7 @@ PRD glossary: "toestel" = household appliance (`appliance`), "apparaat" = a phon
 - TypeScript `strict` mode everywhere; no implicit or explicit `any`. Use `unknown` and narrow it. Rust code (Tauri core) passes `clippy` without warnings.
 - Validate all external input at the boundary with a schema: sync messages from other devices, pairing payloads (K2), web-view requests (K10), imported files, backups. Inside the app, trust the types.
 - Prefer pure functions for business logic (budget forecast, recurrence schedules, quick-entry parsing, merge rules). Keep I/O (storage, network, OS APIs) at the edges.
-- Keep the domain model independent of Tauri, so it runs and is tested in plain Node.
+- Keep the core (`crates/core`) independent of Tauri, so it runs and is tested with plain `cargo test`. Business rules live in the core, not in the UI.
 - No dead code, no commented-out code, no TODOs without an issue or a PRD code.
 - Name things after the PRD glossary (Huishouden → `household`, Ruimte → `room`, Offerte → `quote`, Uitvoerder → `assignee`, Apparaat → `device`, Toestel → `appliance`, …). Keep one consistent English term per concept.
 - Reference PRD requirement codes (H2, B5, K3, …) in tests and PR descriptions when you implement them.
