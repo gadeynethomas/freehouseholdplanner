@@ -219,7 +219,7 @@ here: the rotation with the lowest hash wins, the other device re-rotates).
 | Always reachable (opt-in per device, K11) | The same foreground service without the charger condition |
 | QR scanning | CameraX with ZXing (Apache 2.0). Not Google ML Kit: it is non-free and blocks F-Droid. The Tauri barcode-scanner plugin must be checked for this before use |
 | Permissions | `ACCESS_LOCAL_NETWORK`, `CAMERA` (only when scanning), `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE_CONNECTED_DEVICE`, `CHANGE_NETWORK_STATE` |
-| App id and versions | `org.freehouseholdplanner.app`; `versionCode` = major × 10,000 + minor × 100 + patch, so it only goes up (N8) |
+| App id and versions | `org.freehouseholdplanner.app`; Tauri derives `versionCode` = major × 1,000,000 + minor × 1,000 + patch from the app version, so it only goes up (N8) |
 
 The other vendors' battery savers (Samsung, Xiaomi) are not tested yet; the sync status shows when a
 device was last seen, so a problem is visible to the user.
