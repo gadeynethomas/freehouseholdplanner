@@ -15,7 +15,7 @@ JavaScript in the Tauri web view does not run then at all. So the probe keeps it
 ## Setup (once)
 
 Toolchains are installed per user, without sudo: Rust (`~/.cargo`), Temurin JDK 17 (`~/.jdks`),
-Android SDK with NDK (`~/Android/Sdk`). `env.sh` puts them on the path.
+Android SDK with platform 37, build-tools 37 and NDK (`~/Android/Sdk`). `env.sh` puts them on the path.
 
 ```sh
 source env.sh
@@ -79,12 +79,36 @@ prerequisite is met by declaring `CHANGE_NETWORK_STATE` (a normal permission, gr
 Re-run with `connectedDevice` (same phone, unplugged, locked, deep Doze): 62 of 62 pings in
 10 minutes, median 0.66 s, max 3.9 s. Service reported as `types=0x10`.
 
+### Local network permission (Android 17)
+
+Apps that target API 37 need the runtime permission `ACCESS_LOCAL_NETWORK` for any TCP or UDP
+traffic on the local network. The probe now targets API 37, declares the permission and asks for it
+at launch (`MainActivity.kt`). Tested on 2026-11-11, same Pixel 7a, Android 17:
+
+| Situation | Result |
+| --- | --- |
+| Dialog shown, not answered yet | Connections time out |
+| Granted in the dialog | Connected within 1 s, pings arrive as before |
+| Revoked in Settings | Android kills the process at once ("permissions revoked") |
+| Denied | Connections time out after 5 s. No distinct error (no `EPERM`): from the socket, a missing permission looks the same as a peer that is offline |
+| Denied twice | Flag `USER_FIXED`: Android no longer shows the dialog; only Settings can grant it |
+| Foreground service started while denied | Starts without error (`connectedDevice` does not require it) |
+| Granted later in Settings | No restart needed; the next reconnect attempt succeeds |
+| Granted, service on, screen off, forced deep Doze, 10 min | 61 of 61 pings, median 0.74 s, max 1.6 s, no disconnects |
+
+The dialog belongs to the permission group "Apparaten in de buurt" (nearby devices).
+
+What this means for the real app:
+
+- Check the permission state yourself and show it ("Synchroniseren thuis staat uit: geef toegang tot
+  apparaten in de buurt"). A failing connection cannot tell you why.
+- Ask at pairing time, with a short explanation first, not at launch. After two refusals, link to the
+  app's settings page instead of asking again.
+- Re-check the permission when the app returns to the foreground, and reconnect at once when it is
+  granted.
+
 Not tested yet, needed for the real app:
 
-- **Local network permission (Android 17).** Apps that target API 37 need the runtime permission
-  `ACCESS_LOCAL_NETWORK` (group "Apparaten in de buurt") for any TCP or UDP traffic on the local
-  network. This probe targets API 36 and gets it implicitly. The system picker
-  (`NsdManager.FLAG_SHOW_PICKER`) selects a single service, which does not fit syncing with several
-  peers, so the app should ask for the permission at pairing time and explain why.
+- Discovering peers with mDNS (`NsdManager`) under this permission.
 - Starting the service from `BOOT_COMPLETED`.
 - Other vendors' battery savers.

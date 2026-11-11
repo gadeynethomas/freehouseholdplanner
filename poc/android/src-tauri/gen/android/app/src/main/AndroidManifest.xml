@@ -7,6 +7,8 @@
     <!-- Runtime prerequisite for a connectedDevice foreground service (normal permission, granted at install). -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Android 17 with targetSdk 37: runtime permission for any TCP/UDP traffic on the local network. -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <!-- AndroidTV support -->
     <uses-feature android:name="android.software.leanback" android:required="false" />
