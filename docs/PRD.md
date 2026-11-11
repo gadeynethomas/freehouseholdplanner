@@ -278,8 +278,9 @@ Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
 - [x] Nieuwe open vragen N1–N3 beantwoorden.
 - [ ] Het technisch document (opbouw en techniek) opstellen.
 - [ ] Sync-techniek kiezen (Automerge, Yjs of een alternatief) met een proof of concept: twee gsm's en een laptop die offline wijzigen en daarna correct samenvoegen, thuis en via internet.
-- [ ] README en bijdragegids opstellen.
-- [ ] Diensttype voor de laadmodus kiezen: een dataSync-voorgronddienst mag op Android 15 en later maar 6 uur per 24 uur draaien (K11).
+- [x] README opstellen.
+- [ ] Bijdragegids opstellen.
+- [x] Diensttype voor de laadmodus kiezen: `connectedDevice`, zonder tijdslimiet; een dataSync-voorgronddienst mag op Android 15 en later maar 6 uur per 24 uur draaien (K11, zie poc/android).
 - [ ] Open vraag N7 beantwoorden (relay).
 - [ ] Bij de eerste release: ondertekeningssleutel aanmaken en op twee plaatsen bewaren, release-Action opzetten (N8).
 - [ ] De app registreren bij Google zodra de verificatieplicht voor ontwikkelaars in Europa geldt; een maandelijkse controle herinnert eraan (N8).
