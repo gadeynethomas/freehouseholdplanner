@@ -184,7 +184,7 @@ Elke eis heeft een code (H1, P3, B5 …), zodat we er later naar kunnen verwijze
 
 - **K1** **Apps:** de app draait op Android, Windows en Linux, met dezelfde schermen en functies. Het eerste apparaat maakt het huishouden aan; er is geen server of account bij een dienst nodig. Een huishouden met enkel gsm's werkt volledig: geen pc, altijd-aan-apparaat of relay is nodig om iets anders te laten werken (N6).
 - **K2** **Koppelen met een QR-code:** een gekoppeld apparaat toont een QR-code, het nieuwe apparaat scant hem en haalt een volledige kopie op. De code is eenmalig en 10 minuten geldig. Zonder camera (pc) typ je een korte koppelcode over.
-- **K3** **Synchroniseren:** apparaten wisselen enkel hun wijzigingen uit, automatisch, zodra ze elkaar bereiken: thuis via het eigen netwerk, onderweg rechtstreeks via internet. Lukt een rechtstreekse verbinding niet, dan loopt het verkeer via een relay die enkel versleutelde gegevens doorgeeft en zelf te draaien is. De relay is optioneel; zonder relay synchroniseren apparaten enkel als ze op hetzelfde netwerk zitten (open vraag N7).
+- **K3** **Synchroniseren:** apparaten wisselen enkel hun wijzigingen uit, automatisch, zodra ze elkaar bereiken op hetzelfde netwerk (thuis). Onderweg werk je offline; alles komt samen zodra apparaten elkaar weer bereiken (N7). Rechtstreeks via internet en een zelf gedraaide relay zijn mogelijke uitbreidingen voor later, nooit een vereiste.
 - **K4** **Versleuteld:** alle uitwisseling is end-to-end versleuteld met een sleutel die enkel de apparaten van het huishouden kennen. Een relay of netwerk ziet nooit inhoud.
 - **K5** **Samenvoegen zonder verlies:** wijzigingen die offline op verschillende apparaten gebeurden, voegt de app automatisch samen. Passen twee mensen hetzelfde veld aan, dan wint de laatste wijziging en blijft de andere zichtbaar in de geschiedenis.
 - **K6** **Altijd-aan-apparaat (optioneel):** de app draait ook zonder scherm op een thuisserver, Raspberry Pi of oude gsm aan de lader. Het is een gewoon apparaat van het huishouden zonder extra rechten, maar zorgt dat wijzigingen altijd doorkomen, maakt dagelijks een back-up (G3) en is nodig voor het agenda-abonnement (PL11) en alleen-lezen links (E3). Valt het uit, dan werkt alles gewoon verder. Het is een versneller, geen voorwaarde: zonder werkt alles, alleen PL11 en E3 vallen terug op een export (N6).
@@ -246,11 +246,12 @@ Acht stappen, elk op zich al bruikbaar. De volgorde is goedgekeurd (V8); de nieu
 - Publicatie in de Play Store, de Microsoft Store of de officiële F-Droid-catalogus: eerst via GitHub Releases (N8); een eigen F-Droid-repository en stores eventueel later.
 - Webweergave buiten het thuisnetwerk (bv. op het werk): eventueel later via WebRTC. De browser laadt de app dan van een vaste HTTPS-pagina en maakt een end-to-end versleutelde, rechtstreekse verbinding met de gsm; daarvoor is een kleine server nodig om de verbinding op te zetten, en soms een relay (N5).
 - iOS en macOS: eerst niet. Dezelfde code kan later ook daar draaien, maar vraagt een Apple-ontwikkelaarsaccount.
+- Synchroniseren buitenshuis: eventueel later rechtstreeks via internet over IPv6, of via een zelf gedraaide relay; nooit een vereiste (N7).
 - Een centrale server als verplicht onderdeel; het altijd-aan-apparaat blijft optioneel (K6).
 
 ## Beslissingen en open taken
 
-Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
+Alle vragen zijn beantwoord en verwerkt in de eisen.
 
 | # | Vraag | Beslissing | Verwerkt in |
 | --- | --- | --- | --- |
@@ -268,7 +269,7 @@ Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
 | N4 | Een centrale server, of alles lokaal op elk apparaat? | Local-first (11 november 2026): apps voor Android, Windows en Linux, alle gegevens op elk apparaat, synchroniseren na koppelen met een QR-code, optioneel een altijd-aan-apparaat. Richting: Tauri 2 met TypeScript, SQLite en een CRDT-bibliotheek (Automerge of gelijkaardig); details in het technisch document | K1–K9, H9, A1–A4, niet-functionele eisen |
 | N5 | Hoe gebruik je de app op een pc waar je geen software mag installeren? | Webweergave via het thuisnetwerk (11 november 2026): de gsm toont de app in de browser van de pc, na het intikken van een eenmalige sessiecode. Een variant via WebRTC die ook buitenshuis werkt (bv. op het werk), is een mogelijke uitbreiding voor later | K10, Bewust buiten scope |
 | N6 | Hoe houden we dataverkeer, opslag en batterijverbruik laag, zonder dat een apparaat verplicht is? | Elke functie werkt in een huishouden met enkel gsm's (11 november 2026); pc, altijd-aan-apparaat en relay versnellen enkel. Bijlagen staan op elk apparaat, verkleind bij het toevoegen en buiten de wijzigingsgeschiedenis. Een gsm houdt op de achtergrond geen verbinding open, behalve aan de lader (laadmodus) of als je dat kiest. Basis: de Android-test (poc/android) toonde dat Android een app zonder voorgronddienst binnen 5 s bevriest, en dat met voorgronddienst berichten binnen ongeveer 1 s aankomen, ook in diepe slaap. De NAS dient als optionele bestemming voor back-ups; een rechtstreekse koppeling voor bijlagen is niet nodig | K1, K3, K6, K11, G2, G3, niet-functionele eisen |
-| N7 | Synchroniseren we buitenshuis via een relay, of enkel thuis? | Open. Voorstel: standaard enkel op hetzelfde netwerk (thuis); onderweg werk je offline en alles komt samen zodra je thuis bent. Een relay (zelf te draaien, of een publieke van het project) is een optie, net als het altijd-aan-apparaat. Een rechtstreekse verbinding tussen twee gsm's via mobiel internet lukt meestal niet (CGNAT) | K3 |
+| N7 | Synchroniseren we buitenshuis via een relay, of enkel thuis? | Standaard enkel op hetzelfde netwerk (11 november 2026); onderweg werk je offline en alles komt samen zodra apparaten elkaar weer bereiken. Synchroniseren buitenshuis vraagt altijd dat de andere kant wakker en bereikbaar is: een gsm buiten de laadmodus luistert niet (K11), en een brievenbus (gedeelde map, cloudopslag, e-mail) is een altijd-aan-apparaat in een andere vorm, dus geen vereiste (N6). Uitbreiding voor later: rechtstreeks via internet over IPv6 als beide kanten het hebben en wakker zijn (bv. een gsm thuis in laadmodus); de apparaten vinden elkaar via de publieke BitTorrent-DHT met ondertekende, versleutelde adresrecords (pkarr), zonder server van het project. Een zelf gedraaide relay blijft een optie, nergens voor nodig | K3, Bewust buiten scope |
 | N8 | Hoe installeren de apparaten de app, en hoe krijgen ze updates? | Via GitHub Releases (11 november 2026): bij elke versietag bouwt een GitHub Action alle pakketten, ondertekent ze en publiceert ze; de repository is publiek (AGPL-3.0). Android: updates via Obtainium; een eigen F-Droid-repository op GitHub Pages kan later. Daarom van bij het begin: een vaste app-id, een oplopend versienummer, beschrijving en schermafbeeldingen in de mappen die F-Droid leest (fastlane), en geen onvrije bibliotheken zoals Google Play-diensten. Windows en Linux: de updater van Tauri. De ondertekeningssleutel wordt op twee plaatsen bewaard: wie hem verliest, kan de app niet meer bijwerken of registreren. App-id: org.freehouseholdplanner.app. Registratie bij Google (developer verification) pas wanneer Google ze voor Europa verplicht maakt: eerst een gratis account voor beperkte verspreiding (tot 20 toestellen, geen identiteitsbewijs), een volledig account (25 dollar, identiteitsbewijs) pas als anderen de app gebruiken. Tot dan, of zonder registratie, kan een toestel apps toelaten via de advanced flow van Android (eenmalig, 24 uur wachten) | Niet-functionele eisen, Bewust buiten scope |
 
 ### Open taken
@@ -277,11 +278,12 @@ Alle vragen zijn beantwoord en verwerkt in de eisen, behalve N7.
 - [x] De voorstellen aanvaarden, uitstellen of weigeren.
 - [x] Nieuwe open vragen N1–N3 beantwoorden.
 - [ ] Het technisch document (opbouw en techniek) opstellen.
-- [ ] Sync-techniek kiezen (Automerge, Yjs of een alternatief) met een proof of concept: twee gsm's en een laptop die offline wijzigen en daarna correct samenvoegen, thuis en via internet.
+- [ ] Sync-techniek kiezen (Automerge, Yjs of een alternatief) met een proof of concept: twee gsm's en een laptop die offline wijzigen en daarna correct samenvoegen op het thuisnetwerk (N7).
 - [x] README opstellen.
 - [ ] Bijdragegids opstellen.
 - [x] Diensttype voor de laadmodus kiezen: `connectedDevice`, zonder tijdslimiet; een dataSync-voorgronddienst mag op Android 15 en later maar 6 uur per 24 uur draaien (K11, zie poc/android).
-- [ ] Open vraag N7 beantwoorden (relay).
+- [x] Open vraag N7 beantwoorden (relay).
+- [ ] Rechtstreeks synchroniseren via IPv6 meten: krijgt een gsm op mobiel internet IPv6, en lukt een gelijktijdige verbinding met een apparaat thuis (N7)?
 - [ ] Bij de eerste release: ondertekeningssleutel aanmaken en op twee plaatsen bewaren, release-Action opzetten (N8).
 - [ ] De app registreren bij Google zodra de verificatieplicht voor ontwikkelaars in Europa geldt; een maandelijkse controle herinnert eraan (N8).
 
